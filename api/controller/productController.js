@@ -32,7 +32,7 @@ exports.getProductById  = (req,res,next)=>{
                 return res.status(200).json({
                     message         : 'fetchingDataSucceed',
                     data            : {
-                        productId   : result[0].productId,
+                        id          : result[0].productId,
                         productName : result[0].productName,
                         price       : result[0].price,
                         quantity    : result[0].quantity
@@ -88,4 +88,27 @@ exports.addProduct      = (req,res,next)=>{
         });
 
 
-}
+};
+
+exports.deleteProduct    = (req,res,next)=>{
+    let id               = req.params.productId;
+    let deleteQuery      = `DELETE FROM products WHERE productId = ${id}`;
+
+    connection.query(deleteQuery,(err,result)=>{
+        if(err){
+            return res.status(500).json({
+                message     : 'errorFetchingData'
+            });
+        }
+        if(result.affectedRows > 0){
+            res.status(200).json({
+               message      : 'dataDeletedSuccessfully',
+               dataDeleted  : id 
+            });
+        }else {
+            return res.status(404).json({
+                message     : 'itemDoesNotExist'
+            });
+        }
+    });  
+};

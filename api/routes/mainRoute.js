@@ -1,3 +1,5 @@
+
+
 const express       = require('express');
 const router        = express.Router();
 
@@ -9,6 +11,7 @@ const salesCtrl     = require('../controller/salesController');
 router.get('/products', prodCtrl.getProducts);
 router.get('/products/:productId', prodCtrl.getProductById);
 router.post('/products', prodCtrl.addProduct);
+router.delete('/products/delete/:productId', prodCtrl.deleteProduct);
 
 router.post('/addToCart/:productId', orderCtrl.placeOrder);
 router.post('/checkout', orderCtrl.checkout);

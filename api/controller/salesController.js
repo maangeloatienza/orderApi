@@ -91,17 +91,17 @@ exports.deleteSales = (req, res, next) => {
     connection.query(delQuery, (err, result) => {
         if (err) {
             return res.status(500).json({
-                message: 'errDeletingData'
+                message     : 'errDeletingData'
             });
         }
         if (result.affectedRows >= 1) {
             return res.status(200).json({
-                message: 'deletingDataSucceed',
-                deletedId: orderId
+                message     : 'deletingDataSucceed',
+                deletedId   : orderId
             });
         } else {
             return res.status(404).json({
-                message: "orderIdNotFound"
+                message     : "orderIdNotFound"
             });
         }
     });
