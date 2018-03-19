@@ -3,7 +3,6 @@ const bodyParser    = require('body-parser');
 const morgan        = require('morgan');
 const orderRouter   = require('./api/routes/mainRoute');
 
-
 const app           = express();
 
 
@@ -19,7 +18,7 @@ app.use((req, res, next) => {
     next();
 
 });
-
+app.use('/uploads',express.static('uploads'));
 app.use('/',orderRouter);
 
 //192.168.1.145/24

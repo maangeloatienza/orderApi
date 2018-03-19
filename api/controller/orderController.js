@@ -1,12 +1,23 @@
 const connection        = require('../config/db').connection;
 
+/**
+ * @api {post} /order/addToCart/:productId Add product to Cart
+ * @apiName placeOrder
+ * @apiGroup order
+ *
+ * @apiSuccess {Int}    productId ID of the product.
+ * @apiSuccess {String} productName Name of the product.
+ * @apiSuccess {Float}  price  Cost of each product.
+ * @apiSuccess {Int}    quantity  Number of items.
+ * @apiSuccess {Float}  total  total amount of items added to cart(price*quantity).
+ */
+
 exports.placeOrder      = (req,res,next)=>{
     let fetchData       = req.body;
     let order           = {};
     let getItem         = `SELECT * FROM products WHERE productId = ?`;
     let itemId          = req.params.productId;
     
-    // GET THE SELECTED ITEM
     connection.query(getItem, [itemId],(err,item)=>{
         if(err){
             return res.status(500).json({
@@ -75,6 +86,19 @@ exports.placeOrder      = (req,res,next)=>{
 
     
 };
+
+/**
+ * @api {post} /order/checkout Compile all items from the cart to sales table
+ * @apiName checkout
+ * @apiGroup order
+ *
+ * @apiSuccess {Int}    productId ID of the product.
+ * @apiSuccess {String} productName Name of the product.
+ * @apiSuccess {Float}  price  Cost of each product.
+ * @apiSuccess {Int}    quantity  Number of items.
+ * @apiSuccess {Float}  total  total amount of items added to cart(price*quantity).
+ */
+
 
 exports.checkout        = (req,res,next)=>{
     var totalPay        = 0;

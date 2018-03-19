@@ -1,5 +1,19 @@
 const connection        = require('../config/db').connection;
 
+/**
+ * @api {get} /sales/record Retrieve all successful sales
+ * @apiName getSales
+ * @apiGroup sales
+ *
+ * @apiSuccess {Int}    id Sales ID of the the order.
+ * @apiSuccess {String} items Consists of Item name, quantity, total
+ * @apiSuccess {String} item Name of the item ordered.
+ * @apiSuccess {Int}    quantity Number of item/s ordered.
+ * @apiSuccess {Float}  total  Amount of ordered item price multiplied to quantity.
+ * @apiSuccess {Float}  total  Total of all items ordered.
+ */
+
+
 
 exports.getSales            = (req,res,next)=>{
     let getSales            = `SELECT * FROM sales`;
@@ -24,6 +38,22 @@ exports.getSales            = (req,res,next)=>{
         });
     });
 };
+
+/**
+ * @api {get} /sales/record/: Request User information
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiParam {salesId} id Unique ID for a specific sale.
+ *
+ * @apiSuccess {Int}    id Sales ID of the the order.
+ * @apiSuccess {String} items Consists of Item name, quantity, total
+ *      @apiSuccess {String} item Name of the item ordered.
+ *      @apiSuccess {Int}    quantity Number of item/s ordered.
+ *      @apiSuccess {Float}  total  Amount of ordered item price multiplied to quantity.
+ * @apiSuccess {Float}  total  Total of all items ordered..
+ */
+
 
 exports.getSalesById = (req, res, next) => {
     let getIdQuery = `SELECT * FROM sales WHERE salesId = ${req.params.salesId}`;
@@ -54,6 +84,21 @@ exports.getSalesById = (req, res, next) => {
     });
 };
 
+/**
+ * @api {post} /sales/date Retrieve sales from a specific timeframe
+ * @apiName getSalesById
+ * @apiGroup sales
+ *
+ * @apiSuccess {Int}    id Sales ID of the the order.
+ * @apiSuccess {String} items Consists of Item name, quantity, total
+ *      @apiSuccess {String} item Name of the item ordered.
+ *      @apiSuccess {Int}    quantity Number of item/s ordered.
+ *      @apiSuccess {Float}  total  Amount of ordered item price multiplied to quantity.
+ * @apiSuccess {Float}  total  Total of all items ordered.
+ */
+
+
+
 
 exports.getSalesByDate = (req, res, next) => {
     let startDate = req.body.startDate;
@@ -82,6 +127,16 @@ exports.getSalesByDate = (req, res, next) => {
 
     });
 };
+
+/**
+ * @api {delete} /sales/delete/:salesId Retrieve all successful sales
+ * @apiName deleteSales
+ * @apiGroup sales
+ *
+ * @apiSuccess {Int}    id Sales ID of the the deleted order.
+ * @apiSuccess {String} message prompt a message that the specific sales record is deleted
+ */
+
 
 exports.deleteSales = (req, res, next) => {
 

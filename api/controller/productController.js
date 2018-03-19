@@ -1,5 +1,16 @@
 const connection        = require('../config/db').connection;
 
+/**
+ * @api {get} /products Request Products
+ * @apiName getProducts
+ * @apiGroup products
+ *
+ * @apiSuccess {String} productName Name of the product.
+ * @apiSuccess {Text} productImage Image of the product.
+ * @apiSuccess {Float}  price  Cost of each product.
+ * @apiSuccess {Int}    quantity  Number of items.
+ */
+
 exports.getProducts     = (req,res,next)=>{
         let getQuery    = `SELECT * FROM products`;
         
@@ -16,6 +27,19 @@ exports.getProducts     = (req,res,next)=>{
             });
         });
 };
+
+/**
+ * @api {get} /products/:productId Request Products
+ * @apiName getProducts
+ * @apiGroup getProductById
+ *
+ * @apiParam {productId} id Products unique ID.
+ *
+ * @apiSuccess {String} productName Name of the product.
+ * @apiSuccess {Text} productImage Image of the product.
+ * @apiSuccess {Float}  price  Cost of each product.
+ * @apiSuccess {Int}    quantity  Number of items.
+ */
 
 exports.getProductById  = (req,res,next)=>{
         let productId   = req.params.productId
@@ -34,6 +58,7 @@ exports.getProductById  = (req,res,next)=>{
                     data            : {
                         id          : result[0].productId,
                         productName : result[0].productName,
+                        productImage: result[0].productImage,
                         price       : result[0].price,
                         quantity    : result[0].quantity
                     } 
@@ -46,6 +71,17 @@ exports.getProductById  = (req,res,next)=>{
             
         });
 };
+
+/**
+ * @api {post} /products Request Products
+ * @apiName addProduct
+ * @apiGroup products
+ *
+ * @apiSuccess {String} productName Name of the product.
+ * @apiSuccess {Text} productImage Image of the product.
+ * @apiSuccess {Float}  price  Cost of each product.
+ * @apiSuccess {Int}    quantity  Number of items.
+ */
 
 exports.addProduct      = (req,res,next)=>{
         let product     = {};
@@ -66,12 +102,15 @@ exports.addProduct      = (req,res,next)=>{
                 product     = {
                     productName     : fetchData.productName,
                     price           : fetchData.price,
-                    quantity        : fetchData.quantity
+                    quantity        : fetchData.quantity,
+                    image           : req.file.filename
                 };
 
-                let insProd = `INSERT INTO products(productName,price,quantity) VALUES(?,?,?)`;
+                let insProd = `INSERT INTO products(productName,productImage,price,quantity) VALUES(?,?,?,?)`;
 
-                connection.query(insProd,[product.productName,product.price,product.quantity],(err,product)=>{
+                connection.query(insProd,[product.productName,product.image,product.price,product.quantity],(err,product)=>{
+                    console.log(req.file);
+                    
                     if(err){
                         return res.status(500).json({
                             message         : 'errAddingData'
@@ -89,6 +128,14 @@ exports.addProduct      = (req,res,next)=>{
 
 
 };
+
+/**
+ * @api {delete} /products/delete/:productId Request Products
+ * @apiName deleteProduct
+ * @apiGroup products
+ *
+ * @apiSuccess {String} Success message.
+ */
 
 exports.deleteProduct    = (req,res,next)=>{
     let id               = req.params.productId;
