@@ -10,11 +10,21 @@ function checkEmail(email) {
 }
 
 
+/**
+ * @api {post} /user/register Get information for login
+ * @apiName register
+ * @apiGroup user
+ *
+ * @apiSuccess {Int}    userId ID of the user.
+ * @apiSuccess {String} firstName First name of the user.
+ * @apiSuccess {String} lastName Last name of the user.
+ * @apiSuccess {email}  email  Email address of the user.
+ * @apiSuccess {password}    password  Hashed password of the user.
+ */
+
 exports.register           = (req,res,next)=>{
 
-    //let fetchData       = req.body;
     let password        = req.body.password;
-    //let email           = fetch.email;
     let users           = [];
     
     bcrypt.hash(password,10,(err,hash)=>{
@@ -62,6 +72,20 @@ exports.register           = (req,res,next)=>{
     });
 };
 
+
+/**
+ * @api {post} /user/login Fetch user information to login
+ * @apiName login
+ * @apiGroup user
+ *
+ * @apiSuccess {Int}    userId ID of the user.
+ * @apiSuccess {String} firstName First name of the user.
+ * @apiSuccess {String} lastName Last name of the user.
+ * @apiSuccess {email}  email  Email address of the user.
+ * @apiSuccess {password}    password  Hashed password of the user.
+ * @apiSuccess {token}  token Token for authenticating and limiting access throughout the routes
+ */
+
 exports.login           = (req,res,next)=>{
     connection.query(`SELECT * FROM users WHERE email = ?`,[req.body.email],(err,result)=>{
         if(err){
@@ -102,7 +126,5 @@ exports.login           = (req,res,next)=>{
                 }
             });
         }
-
-
     });
 };
