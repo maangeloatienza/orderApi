@@ -6,7 +6,9 @@ const multer        = require('multer');
 const orderCtrl     = require('../controller/orderController');
 const prodCtrl      = require('../controller/productController');
 const salesCtrl     = require('../controller/salesController');
+const userCtrl      = require('../controller/userController');
 
+const checkauth     = require('../middleware/checkauth');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -34,21 +36,21 @@ const upload = multer({
     fileFilter  : fileFilter
 });
 
+router.post('/users/register', userCtrl.register);
+router.post('/users/login',userCtrl.login);
 
-//router.get(express.static('./uploads'));
 
-
-router.get('/products', prodCtrl.getProducts);
-router.get('/products/:productId', prodCtrl.getProductById);
-router.post('/products', upload.single('productImage'),prodCtrl.addProduct);
-router.delete('/products/delete/:productId', prodCtrl.deleteProduct);
+router.get('/products', checkauth, prodCtrl.getProducts);
+router.get('/products/:productId', checkauth, prodCtrl.getProductById);
+router.post('/products', checkauth, upload.single('productImage'),prodCtrl.addProduct);
+router.delete('/products/delete/:productId', checkauth, prodCtrl.deleteProduct);
 
 router.post('/order/addToCart/:productId', orderCtrl.placeOrder);
 router.post('/order/checkout', orderCtrl.checkout);
 
-router.get('/sales/record', salesCtrl.getSales);
-router.post('/sales/date', salesCtrl.getSalesByDate);
-router.get('/sales/record/:salesId', salesCtrl.getSalesById);
-router.delete('/sales/delete/:salesId', salesCtrl.deleteSales);
+router.get('/sales/record', checkauth, salesCtrl.getSales);
+router.post('/sales/date', checkauth, salesCtrl.getSalesByDate);
+router.get('/sales/record/:salesId', checkauth, salesCtrl.getSalesById);
+router.delete('/sales/delete/:salesId',checkauth, salesCtrl.deleteSales);
 
 module.exports = router;
